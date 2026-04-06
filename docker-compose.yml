@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  circuit-breaker:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    restart: unless-stopped
+
+  load-tester:
+    build: .
+    command: ./build/load_test 16 60
+    depends_on:
+      - circuit-breaker
